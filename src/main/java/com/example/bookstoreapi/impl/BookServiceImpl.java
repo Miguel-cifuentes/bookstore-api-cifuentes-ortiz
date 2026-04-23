@@ -1,9 +1,11 @@
 package com.example.bookstoreapi.impl;
+
 import com.example.bookstoreapi.dto.request.BookRequest;
 import com.example.bookstoreapi.dto.response.BookResponse;
 import com.example.bookstoreapi.entity.Author;
 import com.example.bookstoreapi.entity.Book;
 import com.example.bookstoreapi.entity.Category;
+import com.example.bookstoreapi.exception.custom.ResourceNotFoundException;
 import com.example.bookstoreapi.mapper.BookMapper;
 import com.example.bookstoreapi.repository.AuthorRepository;
 import com.example.bookstoreapi.repository.BookRepository;
@@ -16,51 +18,21 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-
-import com.example.bookstoreapi.dto.request.BookRequest;
-import com.example.bookstoreapi.dto.response.BookResponse;
-import com.example.bookstoreapi.entity.Author;
-import com.example.bookstoreapi.entity.Book;
-import com.example.bookstoreapi.entity.Category;
-import com.example.bookstoreapi.mapper.BookMapper;
-import com.example.bookstoreapi.repository.AuthorRepository;
-import com.example.bookstoreapi.repository.BookRepository;
-import com.example.bookstoreapi.repository.CategoryRepository;
-import com.example.bookstoreapi.security.BookService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-@Service
-@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-public class BookServiceImpl {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final CategoryRepository categoryRepository;
 
+    // ✅ CREAR LIBRO
     @Override
     public BookResponse create(BookRequest request) {
 
         Author author = authorRepository.findById(request.getAuthorId())
-                .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Autor no encontrado"));
 
         List<Category> categories = categoryRepository.findAllById(request.getCategoryIds());
 
-    //  CREAR LIBRO
-    @Override
-    public BookResponse create(BookRequest request) {
-
-        //  Buscar autor
-        Author author = authorRepository.findById(request.getAuthorId())
-                .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
-
-        //  Buscar categorías
-        List<Category> categories = categoryRepository.findAllById(request.getCategoryIds());
-
-        //  Construir entidad
         Book book = new Book();
         book.setTitle(request.getTitle());
         book.setIsbn(request.getIsbn());
@@ -72,14 +44,7 @@ public class BookServiceImpl {
         return BookMapper.toResponse(bookRepository.save(book));
     }
 
-    @Override
-    public List<BookResponse> findAll() {
-        return bookRepository.findAll().stream()
-        // Guardar y mapear
-        return BookMapper.toResponse(bookRepository.save(book));
-    }
-
-    // LISTAR TODOS
+    // ✅ LISTAR TODOS
     @Override
     public List<BookResponse> findAll() {
         return bookRepository.findAll()
@@ -88,10 +53,7 @@ public class BookServiceImpl {
                 .toList();
     }
 
-    @Override
-    public List<BookResponse> findByAuthor(Long authorId) {
-        return bookRepository.findByAuthorId(authorId).stream()
-    // FILTRAR POR AUTOR
+    // ✅ FILTRAR POR AUTOR
     @Override
     public List<BookResponse> findByAuthor(Long authorId) {
         return bookRepository.findByAuthorId(authorId)
@@ -100,13 +62,9 @@ public class BookServiceImpl {
                 .toList();
     }
 
+    // ✅ FILTRAR POR CATEGORÍA
     @Override
     public List<BookResponse> findByCategory(Long categoryId) {
-        return bookRepository.findByCategoriesId(categoryId).stream()
-                .map(BookMapper::toResponse)
-                .toList();
-    }
-}
         return bookRepository.findByCategoriesId(categoryId)
                 .stream()
                 .map(BookMapper::toResponse)

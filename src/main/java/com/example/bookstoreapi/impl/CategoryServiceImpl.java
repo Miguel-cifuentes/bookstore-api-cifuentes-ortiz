@@ -17,12 +17,13 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CategoryMapper categoryMapper;
 
     @Override
     public CategoryResponse create(CategoryRequest request) {
-        Category category = categoryMapper.toEntity(request);
-        return categoryMapper.toResponse(categoryRepository.save(category));
+        Category category = new Category();
+        category.setName(request.getName());
+
+        return CategoryMapper.toResponse(categoryRepository.save(category));
     }
 
     @Override
@@ -31,21 +32,22 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada"));
 
         category.setName(request.getName());
-        return categoryMapper.toResponse(categoryRepository.save(category));
+        return CategoryMapper.toResponse(categoryRepository.save(category));
     }
 
     @Override
     public CategoryResponse getById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada"));
-        return categoryMapper.toResponse(category);
+
+        return CategoryMapper.toResponse(category);
     }
 
     @Override
     public List<CategoryResponse> getAll() {
         return categoryRepository.findAll()
                 .stream()
-                .map(categoryMapper::toResponse)
+                .map(CategoryMapper::toResponse)
                 .toList();
     }
 

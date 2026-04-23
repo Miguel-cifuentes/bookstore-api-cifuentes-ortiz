@@ -20,12 +20,12 @@ public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
-    private final AuthorMapper authorMapper;
 
     @Override
     public AuthorResponse create(AuthorRequest request) {
-        Author author = authorMapper.toEntity(request);
-        return authorMapper.toResponse(authorRepository.save(author));
+        Author author = new Author();
+        author.setName(request.getName());
+        return AuthorMapper.toResponse(authorRepository.save(author));
     }
 
     @Override
@@ -34,21 +34,21 @@ public class AuthorServiceImpl implements AuthorService {
                 .orElseThrow(() -> new ResourceNotFoundException("Autor no encontrado"));
 
         author.setName(request.getName());
-        return authorMapper.toResponse(authorRepository.save(author));
+        return AuthorMapper.toResponse(authorRepository.save(author));
     }
 
     @Override
     public AuthorResponse getById(Long id) {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Autor no encontrado"));
-        return authorMapper.toResponse(author);
+        return AuthorMapper.toResponse(author);
     }
 
     @Override
     public List<AuthorResponse> getAll() {
         return authorRepository.findAll()
                 .stream()
-                .map(authorMapper::toResponse)
+                .map(AuthorMapper::toResponse)
                 .toList();
     }
 
@@ -58,8 +58,9 @@ public class AuthorServiceImpl implements AuthorService {
                 .orElseThrow(() -> new ResourceNotFoundException("Autor no encontrado"));
 
         boolean hasBooks = bookRepository.existsByAuthor(author);
+
         if (hasBooks) {
-            throw new AuthorHasBooksException("No se puede eliminar el autor porque tiene libros asociados");
+            throw new AuthorHasBooksException("No se puede eliminar el autor porque tiene libros");
         }
 
         authorRepository.delete(author);

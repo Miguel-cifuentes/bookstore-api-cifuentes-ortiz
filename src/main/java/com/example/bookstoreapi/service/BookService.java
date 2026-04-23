@@ -1,5 +1,9 @@
-package com.example.bookstoreapi.security;
+package com.example.bookstoreapi.service;
 
+import com.example.bookstoreapi.dto.request.BookRequest;
+import com.example.bookstoreapi.dto.response.BookResponse;
+
+import java.util.List;
 
 public interface BookService {
 
@@ -11,6 +15,4 @@ public interface BookService {
 
     List<BookResponse> findByCategory(Long categoryId);
 }
-public class BookService {
 
-}
