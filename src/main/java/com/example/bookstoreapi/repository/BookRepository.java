@@ -4,7 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public class BookRepository {
+public interface BookRepository extends JpaRepository<Book, Long> {
+
     List<Book> findByAuthorId(Long authorId);
 
     List<Book> findByCategoriesId(Long categoryId);

@@ -4,7 +4,8 @@ import com.example.bookstoreapi.dto.response.BookResponse;
 
 import java.util.List;
 
-public class BookService {
+public interface BookService {
+
     BookResponse create(BookRequest request);
 
     List<BookResponse> findAll();
