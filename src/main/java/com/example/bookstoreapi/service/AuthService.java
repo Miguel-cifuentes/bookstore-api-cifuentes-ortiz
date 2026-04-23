@@ -1,9 +1,12 @@
 package com.example.bookstoreapi.service;
 
-import com.example.bookstoreapi.dto.request.AuthorRequest;
-import com.example.bookstoreapi.dto.response.AuthorResponse;
+import com.example.bookstoreapi.dto.request.LoginRequest;
+import com.example.bookstoreapi.dto.request.RegisterRequest;
+import com.example.bookstoreapi.dto.response.AuthResponse;
 
-import java.util.List;
+public interface AuthService {
 
-public class AuthService {
+    AuthResponse register(RegisterRequest request);
+
+    AuthResponse login(LoginRequest request);
 }
