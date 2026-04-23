@@ -1,10 +1,8 @@
 package com.example.bookstoreapi.security;
-import com.example.bookstoreapi.dto.request.BookRequest;
-import com.example.bookstoreapi.dto.response.BookResponse;
 
-import java.util.List;
 
-public class BookService {
+public interface BookService {
+
     BookResponse create(BookRequest request);
 
     List<BookResponse> findAll();
@@ -12,4 +10,7 @@ public class BookService {
     List<BookResponse> findByAuthor(Long authorId);
 
     List<BookResponse> findByCategory(Long categoryId);
+}
+public class BookService {
+
 }
