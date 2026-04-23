@@ -1,4 +1,6 @@
 package com.example.bookstoreapi.entity;
 
-public class Role {
+public enum Role {
+    ROLE_USER,
+    ROLE_ADMIN
 }
