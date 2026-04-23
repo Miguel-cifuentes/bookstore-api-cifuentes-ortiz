@@ -1,4 +1,7 @@
 package com.example.bookstoreapi.entity;
 
-public class OrderStatus {
+public enum OrderStatus {
+    PENDING,
+    CONFIRMED,
+    CANCELLED
 }
