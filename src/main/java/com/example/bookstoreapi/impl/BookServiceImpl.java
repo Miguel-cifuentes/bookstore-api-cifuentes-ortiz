@@ -17,10 +17,37 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 
+import com.example.bookstoreapi.dto.request.BookRequest;
+import com.example.bookstoreapi.dto.response.BookResponse;
+import com.example.bookstoreapi.entity.Author;
+import com.example.bookstoreapi.entity.Book;
+import com.example.bookstoreapi.entity.Category;
+import com.example.bookstoreapi.mapper.BookMapper;
+import com.example.bookstoreapi.repository.AuthorRepository;
+import com.example.bookstoreapi.repository.BookRepository;
+import com.example.bookstoreapi.repository.CategoryRepository;
+import com.example.bookstoreapi.security.BookService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class BookServiceImpl implements BookService {
+
 public class BookServiceImpl {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final CategoryRepository categoryRepository;
+
+    @Override
+    public BookResponse create(BookRequest request) {
+
+        Author author = authorRepository.findById(request.getAuthorId())
+                .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
+
+        List<Category> categories = categoryRepository.findAllById(request.getCategoryIds());
 
     //  CREAR LIBRO
     @Override
@@ -42,6 +69,12 @@ public class BookServiceImpl {
         book.setAuthor(author);
         book.setCategories(categories);
 
+        return BookMapper.toResponse(bookRepository.save(book));
+    }
+
+    @Override
+    public List<BookResponse> findAll() {
+        return bookRepository.findAll().stream()
         // Guardar y mapear
         return BookMapper.toResponse(bookRepository.save(book));
     }
@@ -55,6 +88,9 @@ public class BookServiceImpl {
                 .toList();
     }
 
+    @Override
+    public List<BookResponse> findByAuthor(Long authorId) {
+        return bookRepository.findByAuthorId(authorId).stream()
     // FILTRAR POR AUTOR
     @Override
     public List<BookResponse> findByAuthor(Long authorId) {
@@ -66,6 +102,11 @@ public class BookServiceImpl {
 
     @Override
     public List<BookResponse> findByCategory(Long categoryId) {
+        return bookRepository.findByCategoriesId(categoryId).stream()
+                .map(BookMapper::toResponse)
+                .toList();
+    }
+}
         return bookRepository.findByCategoriesId(categoryId)
                 .stream()
                 .map(BookMapper::toResponse)

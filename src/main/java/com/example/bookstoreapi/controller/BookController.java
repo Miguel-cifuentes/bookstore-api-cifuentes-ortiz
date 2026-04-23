@@ -12,6 +12,16 @@ import java.util.List;
 @RequestMapping("/books")
 @RequiredArgsConstructor
 
+import com.example.bookstoreapi.dto.request.BookRequest;
+import com.example.bookstoreapi.dto.response.BookResponse;
+import com.example.bookstoreapi.security.BookService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/books")
+@RequiredArgsConstructor
 public class BookController {
     private final BookService service;
 
